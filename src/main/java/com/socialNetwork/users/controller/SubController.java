@@ -18,17 +18,17 @@ public class SubController {
     }
 
     @PostMapping
-    String follow(@RequestBody Sub sub) {
+    public String follow(@RequestBody Sub sub) {
         return subService.follow(sub);
     }
 
     @GetMapping(path = "/{id}")
-    Sub getSub(@PathVariable int id) {
+    public Sub getSub(@PathVariable int id) {
         return subService.getSub(id);
     }
 
     @PutMapping("/{id}")
-    String updateSub(@RequestBody Sub sub, @PathVariable int id) {
+    public String updateSub(@RequestBody Sub sub, @PathVariable int id) {
         if (sub.getId() != id) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
@@ -36,14 +36,12 @@ public class SubController {
     }
 
     @DeleteMapping("/{id}")
-    String unfollow(@PathVariable int id) {
+    public String unfollow(@PathVariable int id) {
         return subService.unfollow(id);
     }
 
     @GetMapping
-    List<Sub> getAllSubss() {
+    public List<Sub> getAllSubss() {
         return subService.getAllSubs();
     }
-
-
 }

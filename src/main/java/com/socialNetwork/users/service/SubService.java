@@ -21,6 +21,7 @@ public class SubService {
         this.subRepository = subRepository;
         this.userRepository = userRepository;
     }
+
     public String follow(Sub sub) {
         Optional<Sub> existingSub = subRepository.findByUserIdAndTargetId(sub.getUserId(), sub.getTargetId());
         Optional<User> currentUser = userRepository.findById(sub.getUserId());
@@ -29,7 +30,7 @@ public class SubService {
              throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
         Sub subscription = subRepository.save(sub);
-        return String.format("Пользователь с id = %s подписался на пользователя с id = %s ", subscription.getUserId(),
+        return String.format("Пользователь с id = %s подписался на пользователя с id = %s", subscription.getUserId(),
                 subscription.getTargetId());
     }
     public Sub getSub(int id) {

@@ -35,10 +35,13 @@ public class User {
     @Column(name = "is_deleted")
     private boolean isDeleted = Boolean.FALSE;
 
+    @Column(name = "city")
+    private String city;
+
     public User() {}
 
     public User(int id, String name, String surname, String sex, String country, String phone, Date birthDate,
-                String profileText, String email, String passwordHash, String imgUrl, boolean isDeleted) {
+                String profileText, String email, String passwordHash, String imgUrl, boolean isDeleted, String city) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -51,6 +54,7 @@ public class User {
         this.passwordHash = passwordHash;
         this.imgUrl = imgUrl;
         this.isDeleted = isDeleted;
+        this.city = city;
     }
 
     public int getId() {
@@ -104,6 +108,28 @@ public class User {
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
     }
+    public String getCity() {
+        return city;
+    }
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public User(String name, String surname, String sex, String country, String phone, Date birthDate,
+                String profileText, String email, String passwordHash, String imgUrl, boolean isDeleted, String city) {
+        this.name = name;
+        this.surname = surname;
+        this.sex = sex;
+        this.country = country;
+        this.phone = phone;
+        this.birthDate = birthDate;
+        this.profileText = profileText;
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.imgUrl = imgUrl;
+        this.isDeleted = isDeleted;
+        this.city = city;
+    }
 
     @Override
     public String toString() {
@@ -120,6 +146,7 @@ public class User {
                 ", passwordHash='" + passwordHash + '\'' +
                 ", imgUrl='" + imgUrl + '\'' +
                 ", isDeleted=" + isDeleted +
+                ", city='" + city + '\'' +
                 '}';
     }
 }

@@ -27,6 +27,12 @@ public class Sub {
         this.date = date;
     }
 
+    public Sub(int userId, int targetId, Date date) {
+        this.userId = userId;
+        this.targetId = targetId;
+        this.date = date;
+    }
+
     public int getId() {
         return id;
     }

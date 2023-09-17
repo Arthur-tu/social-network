@@ -19,17 +19,17 @@ public class UserController {
     }
 
     @PostMapping
-    String createUser(@RequestBody User user) {
+    public String createUser(@RequestBody User user) {
         return userService.createUser(user);
     }
 
     @GetMapping(path = "/{id}")
-    User getUser(@PathVariable int id) {
+    public User getUser(@PathVariable int id) {
         return userService.getUser(id);
     }
 
     @PutMapping("/{id}")
-    String updateUser(@RequestBody User user, @PathVariable int id) {
+    public String updateUser(@RequestBody User user, @PathVariable int id) {
         if (user.getId() != id) {
            throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
@@ -37,12 +37,12 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    String deleteUser(@PathVariable int id) {
+    public String deleteUser(@PathVariable int id) {
         return userService.deleteUser(id);
     }
 
     @GetMapping
-    List<User> getUsers() {
+    public List<User> getUsers() {
         return userService.getUsers();
     }
 }
