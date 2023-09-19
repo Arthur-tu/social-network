@@ -2,6 +2,7 @@ package com.socialNetwork.users.controller;
 
 import com.socialNetwork.users.entity.Sub;
 import com.socialNetwork.users.service.SubService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,17 +17,17 @@ public class SubController {
     public SubController(SubService subService) {
         this.subService = subService;
     }
-
+    @Operation(summary = "Создание подписки")
     @PostMapping
     public String follow(@RequestBody Sub sub) {
         return subService.follow(sub);
     }
-
+    @Operation(summary = "Получение подписки")
     @GetMapping(path = "/{id}")
     public Sub getSub(@PathVariable int id) {
         return subService.getSub(id);
     }
-
+    @Operation(summary = "Обновление подписки")
     @PutMapping("/{id}")
     public String updateSub(@RequestBody Sub sub, @PathVariable int id) {
         if (sub.getId() != id) {
@@ -34,12 +35,12 @@ public class SubController {
         }
         return subService.updateSub(sub, id);
     }
-
+    @Operation(summary = "Удаление подписки")
     @DeleteMapping("/{id}")
     public String unfollow(@PathVariable int id) {
         return subService.unfollow(id);
     }
-
+    @Operation(summary = "Получение списка подписок")
     @GetMapping
     public List<Sub> getAllSubss() {
         return subService.getAllSubs();
