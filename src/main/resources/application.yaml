@@ -1,12 +1,12 @@
 server:
   port: 8080
-
 spring:
   application:
     name: users
   datasource:
     username: postgres
     password: 123
+    driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/users
     jpa:
       properties:
@@ -16,6 +16,9 @@ spring:
       hibernate:
         ddl-auto: create-drop
       show-sql: true
+  liquibase:
+    default-schema: users_scheme
+
 springdoc:
   swagger-ui:
     path: /doc-ui

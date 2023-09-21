@@ -1,0 +1,361 @@
+databaseChangeLog:
+  #   Создание users_scheme
+  - changeSet:
+      id: 000-1
+      author: artur
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  autoIncrement: true
+                  type: int
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: surname
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sex
+                  type: varchar(10)
+              - column:
+                  name: country
+                  type: varchar(50)
+              - column:
+                  name: phone
+                  type: varchar(11)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: birth_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: profile_text
+                  type: varchar(255)
+              - column:
+                  name: email
+                  type: varchar(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password_hash
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: img_url
+                  type: varchar(255)
+              - column:
+                  name: is_deleted
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: city
+                  type: varchar(50)
+  #   Создание таблицы subs
+  - changeSet:
+      id: 000-2
+      author: artur
+      changes:
+        - createTable:
+            tableName: subs
+            columns:
+              - column:
+                  name: id
+                  autoIncrement: true
+                  type: int
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: target_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date
+                  type: date
+                  constraints:
+                    nullable: false
+  #   Создание таблицы posts
+  - changeSet:
+      id: 000-3
+      author: artur
+      changes:
+        - createTable:
+            tableName: posts
+            columns:
+              - column:
+                  name: id
+                  autoIncrement: true
+                  type: int
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: text
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: img_url
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_date
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_date
+                  type: timestamp
+  #   Создание таблицы likes
+  - changeSet:
+      id: 000-4
+      author: artur
+      changes:
+        - createTable:
+            tableName: likes
+            columns:
+              - column:
+                  name: id
+                  autoIncrement: true
+                  type: int
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: post_id
+                  type: int
+                  constraints:
+                    nullable: false
+  #   Создание таблицы comments
+  - changeSet:
+      id: 000-5
+      author: artur
+      changes:
+        - createTable:
+            tableName: comments
+            columns:
+              - column:
+                  name: id
+                  autoIncrement: true
+                  type: int
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: post_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: text
+                  type: varchar(500)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_date
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_date
+                  type: timestamp
+  # Добавление fk
+  - changeSet:
+      id: 000-6
+      author: artur
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_comments2posts
+            baseTableName: comments
+            baseColumnNames: post_id
+            referencedTableName: posts
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+  - changeSet:
+      id: 000-7
+      author: artur
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_users2comments
+            baseTableName: comments
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+
+  - changeSet:
+      id: 000-8
+      author: artur
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_posts2likes
+            baseTableName: likes
+            baseColumnNames: post_id
+            referencedTableName: posts
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+  - changeSet:
+      id: 000-9
+      author: artur
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_users2likes
+            baseTableName: likes
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+
+  - changeSet:
+      id: 000-10
+      author: artur
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_users2posts
+            baseTableName: posts
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+
+  - changeSet:
+      id: 000-11
+      author: artur
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_users2subs
+            baseTableName: subs
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+
+  - changeSet:
+      id: 000-12
+      author: artur
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_users2target
+            baseTableName: subs
+            baseColumnNames: target_id
+            referencedTableName: users
+            referencedColumnNames: id
+
+  # Создание индексов
+  - changeSet:
+      id: 000-13
+      author: artur
+      changes:
+        - sql:
+            sql: CREATE INDEX IF NOT EXISTS i_comments_user_id ON comments USING hash (user_id) TABLESPACE pg_default;
+
+  - changeSet:
+      id: 000-14
+      author: artur
+      changes:
+        - sql:
+            sql: CREATE INDEX IF NOT EXISTS i_comments_post_id ON comments USING hash (post_id) TABLESPACE pg_default;
+
+  - changeSet:
+      id: 000-15
+      author: artur
+      changes:
+        - sql:
+            sql: CREATE INDEX IF NOT EXISTS i_likes_post_id ON likes USING hash (post_id) TABLESPACE pg_default;
+
+  - changeSet:
+      id: 000-16
+      author: artur
+      changes:
+        - sql:
+            sql: CREATE INDEX IF NOT EXISTS i_likes_user_id ON likes USING hash (user_id) TABLESPACE pg_default;
+
+  - changeSet:
+      id: 000-17
+      author: artur
+      changes:
+        - sql:
+            sql: CREATE INDEX IF NOT EXISTS i_likes_user_id_post_id ON likes USING btree (user_id ASC NULLS LAST, post_id ASC NULLS LAST) TABLESPACE pg_default;
+
+  - changeSet:
+      id: 000-18
+      author: artur
+      changes:
+        - sql:
+            sql: CREATE INDEX IF NOT EXISTS i_posts_user_id ON posts USING hash (user_id) TABLESPACE pg_default;
+
+  - changeSet:
+      id: 000-19
+      author: artur
+      changes:
+        - sql:
+            sql: CREATE INDEX IF NOT EXISTS i_subs_target_id ON subs USING hash (target_id) TABLESPACE pg_default;
+
+  - changeSet:
+      id: 000-20
+      author: artur
+      changes:
+        - sql:
+            sql: CREATE INDEX IF NOT EXISTS i_subs_user_id ON subs USING hash (user_id) TABLESPACE pg_default;
+
+  - changeSet:
+      id: 000-21
+      author: artur
+      changes:
+        - sql:
+            sql: CREATE INDEX IF NOT EXISTS i_user_city ON users USING hash (city COLLATE pg_catalog."default") TABLESPACE pg_default;
+
+  - changeSet:
+      id: 000-22
+      author: artur
+      changes:
+        - sql:
+            sql: CREATE INDEX IF NOT EXISTS i_user_sex ON users USING hash (sex COLLATE pg_catalog."default") TABLESPACE pg_default;
+
+  - changeSet:
+      id: 000-23
+      author: artur
+      changes:
+        - sql:
+            sql: CREATE INDEX IF NOT EXISTS i_users_city_and_sex ON users USING btree (city COLLATE pg_catalog."default" ASC NULLS LAST, sex COLLATE pg_catalog."default" ASC NULLS LAST) WITH (deduplicate_items=True) TABLESPACE pg_default;
+
+  - changeSet:
+      id: 000-24
+      author: artur
+      changes:
+        - sql:
+            sql: CREATE INDEX IF NOT EXISTS i_users_name_and_surname ON users USING btree (name COLLATE pg_catalog."default" ASC NULLS LAST, surname COLLATE pg_catalog."default" ASC NULLS LAST) WITH (deduplicate_items=True) TABLESPACE pg_default;
