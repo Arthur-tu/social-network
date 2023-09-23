@@ -1,4 +1,4 @@
-FROM openjdk:20
+FROM openjdk:19
 LABEL authors="artur"
 RUN mkdir /app
 COPY build/libs/users-0.0.1-SNAPSHOT.jar /app

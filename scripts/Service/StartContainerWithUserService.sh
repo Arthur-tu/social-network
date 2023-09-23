@@ -1,0 +1,1 @@
+docker run --rm -p 8801:8080 users-img

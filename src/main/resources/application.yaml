@@ -13,13 +13,9 @@ spring:
         hibernate:
           dialect: org.hibernate.dialect.PostgreSQLDialect
           format_sql: true
-      hibernate:
-        ddl-auto: create-drop
-      show-sql: true
   liquibase:
     default-schema: users_scheme
 
 springdoc:
   swagger-ui:
     path: /doc-ui
-
