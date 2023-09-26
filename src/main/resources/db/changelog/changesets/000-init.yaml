@@ -1,5 +1,4 @@
 databaseChangeLog:
-  #   Создание users_scheme
   - changeSet:
       id: 000-1
       author: artur

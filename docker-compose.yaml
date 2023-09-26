@@ -1,0 +1,32 @@
+version: '2'
+services:
+  users:
+    build:
+      context: .
+      dockerfile: dockerfile
+    image: client:0.0.1
+    container_name: users
+    ports:
+      - "8801:8080"
+    depends_on:
+      - psql
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://psql:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=123
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DEFAULT_SCHEMA=users_scheme
+      - SPRING_LIQUIBASE_DEFAULT_SCHEMA=users_scheme
+    restart: unless-stopped
+
+  psql:
+    image: postgres:15
+    container_name: psql
+    ports:
+      - "5432:5432"
+    volumes:
+      - "/tmp/postgres-data:/var/lib/postgresql/data"
+    environment:
+      - POSTGRES_DB=users
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123
+    restart: unless-stopped
