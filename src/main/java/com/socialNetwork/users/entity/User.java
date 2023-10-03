@@ -114,7 +114,6 @@ public class User {
     public void setCity(String city) {
         this.city = city;
     }
-
     public User(String name, String surname, String sex, String country, String phone, Date birthDate,
                 String profileText, String email, String passwordHash, String imgUrl, boolean isDeleted, String city) {
         this.name = name;

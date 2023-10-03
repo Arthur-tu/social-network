@@ -29,6 +29,7 @@ class UserControllerTest {
     private WebApplicationContext webApplicationContext;
 
     private MockMvc mockMvc;
+
     @MockBean
     private UserService userService;
 
