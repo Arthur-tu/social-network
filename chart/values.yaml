@@ -1,0 +1,49 @@
+appName: users
+ingressedService: users-backend-service
+apiHost:  http://users-backend-service
+appHost: users-backend-prod.local
+namespace: &namespace prod
+config-filename: &config-filename users-config
+postgres_user: "postgres"
+postgres_password: "123"
+
+apps:
+  postgres:
+    appName: psql
+    namespace: *namespace
+    replicasCount: 1
+    container:
+      image: postgres
+      version: 15
+      port: 5432
+    env:
+      - name: POSTGRES_DB
+        valueFrom:
+          configMapKeyRef:
+            name: *config-filename
+            key: postgres_db
+      - name: POSTGRES_USER
+        valueFrom:
+          configMapKeyRef:
+            name: *config-filename
+            key: postgres_user
+      - name: POSTGRES_PASSWORD
+        valueFrom:
+          configMapKeyRef:
+            name: *config-filename
+            key: postgres_password
+    service:
+      port: 5432
+      targetPort: 5432
+  users-backend:
+    appName: users
+    namespace: *namespace
+    replicasCount: 1
+    container:
+      image: client
+      version: 0.0.1
+      port: 8080
+    service: 
+      port: 8181
+      targetPort: 8080
+    

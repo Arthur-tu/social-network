@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.appName }}-config
+  namespace: {{ .Values.namespace }}
+data: 
+  users_backend_host: {{ .Values.apiHost }}
+  postgres_db: "users"
+  postgres_user: "{{ .Values.postgres_user }}"
+  postgres_password: "{{ .Values.postgres_password }}"
+  

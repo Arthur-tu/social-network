@@ -1,0 +1,14 @@
+namespace: &namespace reviews
+appHost: users-reviews.local
+
+apps:
+  postgres:
+    namespace: *namespace
+    replicasCount: 1
+    container:
+      version: 15
+  users-backend:
+    namespace: *namespace
+    replicasCount: 1
+    container:
+      version: 0.0.1
