@@ -1,5 +1,13 @@
 server:
-  port: 8080
+  port: 7777
+  ssl:
+    enabled: true
+    key-store-type: JKS
+    key-store: serverCerts/$SERVER.keystore.jks
+    key-store-password: 123456
+    protocol: TLS
+    enabled-protocols: TLSv1.3
+
 spring:
   application:
     name: users
@@ -7,7 +15,7 @@ spring:
     username: postgres
     password: 123
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/users
+    url: jdbc:postgresql://localhost:5432/users?ssl=true&sslmode=require
   jpa:
     properties:
       hibernate:

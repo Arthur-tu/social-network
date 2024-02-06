@@ -50,6 +50,16 @@ sonarqube {
 	}
 }
 
+bootRun {
+	jvmArgs	= [
+			"-Djavax.net.ssl.trustStore=$trustStorePath",
+			"-Djavax.net.ssl.trustStorePassword=$trustStorePassword",
+			"-Djavax.net.ssl.trustStoreType=JKS",
+			"-Djavax.net.debug=all"
+	]
+}
+
+
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
