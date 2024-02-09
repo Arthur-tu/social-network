@@ -8,6 +8,10 @@ server:
     protocol: TLS
     enabled-protocols: TLSv1.3
 
+keycloak:
+  uri: 'http://localhost:8080'
+  realm: "users"
+
 spring:
   application:
     name: users
@@ -20,9 +24,13 @@ spring:
     properties:
       hibernate:
         default_schema: users_scheme
-
   liquibase:
     default-schema: users_scheme
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/users
 
 springdoc:
   swagger-ui:

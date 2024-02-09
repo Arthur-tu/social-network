@@ -4,6 +4,8 @@ import com.socialNetwork.users.entity.User;
 import com.socialNetwork.users.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -20,17 +22,17 @@ public class UserController {
     }
     @Operation(summary = "Добавление пользователя")
     @PostMapping
-    public String createUser(@RequestBody User user) {
+    public String createUser(@RequestBody User user, @AuthenticationPrincipal Jwt jwt) {
         return userService.createUser(user);
     }
     @Operation(summary = "Получение пользователя")
     @GetMapping(path = "/{id}")
-    public User getUser(@PathVariable int id) {
+    public User getUser(@PathVariable int id, @AuthenticationPrincipal Jwt jwt) {
         return userService.getUser(id);
     }
     @Operation(summary = "Обновление пользователя")
     @PutMapping("/{id}")
-    public String updateUser(@RequestBody User user, @PathVariable int id) {
+    public String updateUser(@RequestBody User user, @PathVariable int id, @AuthenticationPrincipal Jwt jwt) {
         if (user.getId() != id) {
            throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
@@ -38,7 +40,7 @@ public class UserController {
     }
     @Operation(summary = "Удаление пользователя")
     @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable int id) {
+    public String deleteUser(@PathVariable int id, @AuthenticationPrincipal Jwt jwt) {
         return userService.deleteUser(id);
     }
     @Operation(summary = "Получение списка пользователей")
