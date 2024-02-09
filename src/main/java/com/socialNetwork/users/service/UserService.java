@@ -27,17 +27,23 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    public String updateUser(User user, int id) {
+    public String updateUser(User user, int id, boolean isAdmin) {
         if (!userRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        if (!isAdmin) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         User savedUser = userRepository.save(user);
         return String.format("Пользователь %s успешно обновлен", savedUser.getSurname());
     }
 
-    public String deleteUser(int id) {
+    public String deleteUser(int id, boolean isAdmin) {
         if (!userRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        if (!isAdmin) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         User deletedUser = userRepository.findById(id).orElseThrow(() -> new
                 ResponseStatusException(HttpStatus.NOT_FOUND));

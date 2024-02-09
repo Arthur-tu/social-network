@@ -102,8 +102,9 @@ class UserServiceTest {
         Mockito.when(userRepository.existsById(userId)).thenReturn(true);
         Mockito.when(userRepository.save(user)).thenReturn(user);
         UserService userService = new UserService(userRepository);
+        boolean isAdmin = true;
 
-        String result = userService.updateUser(user, userId);
+        String result = userService.updateUser(user, userId, isAdmin);
 
         Assertions.assertEquals("Пользователь Testsurname успешно обновлен", result);
     }
@@ -114,8 +115,20 @@ class UserServiceTest {
         int userId = 1;
         Mockito.when(userRepository.existsById(userId)).thenReturn(false);
         UserService userService = new UserService(userRepository);
+        boolean isAdmin = true;
+        Executable executable = () -> userService.updateUser(new User(), userId, isAdmin);
 
-        Executable executable = () -> userService.updateUser(new User(), userId);
+        Assertions.assertThrows(ResponseStatusException.class, executable);
+    }
+
+    @Test
+    void updateUserNotAdmin() {
+        UserRepository userRepository = Mockito.mock(UserRepository.class);
+        int userId = 1;
+        Mockito.when(userRepository.existsById(userId)).thenReturn(false);
+        UserService userService = new UserService(userRepository);
+        boolean isAdmin = false;
+        Executable executable = () -> userService.updateUser(new User(), userId, isAdmin);
 
         Assertions.assertThrows(ResponseStatusException.class, executable);
     }
@@ -130,8 +143,8 @@ class UserServiceTest {
         Mockito.when(userRepository.existsById(userId)).thenReturn(true);
         Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         UserService userService = new UserService(userRepository);
-
-        String result = userService.deleteUser(userId);
+        boolean isAdmin = true;
+        String result = userService.deleteUser(userId, isAdmin);
 
         Assertions.assertEquals("Пользователь c id = 1 успешно удален", result);
         Assertions.assertTrue(user.isDeleted());
@@ -143,8 +156,24 @@ class UserServiceTest {
         int userId = 1;
         Mockito.when(userRepository.existsById(userId)).thenReturn(false);
         UserService userService = new UserService(userRepository);
+        boolean isAdmin = true;
+        Executable executable = () -> userService.deleteUser(userId, isAdmin);
 
-        Executable executable = () -> userService.deleteUser(userId);
+        Assertions.assertThrows(ResponseStatusException.class, executable);
+    }
+
+    @Test
+    void deleteUserNotAdmin() {
+        UserRepository userRepository = Mockito.mock(UserRepository.class);
+        int userId = 1;
+        User user = new User(userId, "Testname", "Testsurname", "Male", "Russia",
+                "79261134321", new Date(), "Testtext", "testuser@test.com", "123",
+                "testurl", false, "Moscow");
+        Mockito.when(userRepository.existsById(userId)).thenReturn(true);
+        Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        UserService userService = new UserService(userRepository);
+        boolean isAdmin = false;
+        Executable executable = () -> userService.updateUser(new User(), userId, isAdmin);
 
         Assertions.assertThrows(ResponseStatusException.class, executable);
     }
