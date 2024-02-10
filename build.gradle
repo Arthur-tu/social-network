@@ -55,7 +55,7 @@ bootRun {
 			"-Djavax.net.ssl.trustStore=$trustStorePath",
 			"-Djavax.net.ssl.trustStorePassword=$trustStorePassword",
 			"-Djavax.net.ssl.trustStoreType=JKS",
-			"-Djavax.net.debug=all"
+		//	"-Djavax.net.debug=all"
 	]
 }
 

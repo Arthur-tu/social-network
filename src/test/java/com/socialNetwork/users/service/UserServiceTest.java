@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mockito;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -103,8 +104,10 @@ class UserServiceTest {
         Mockito.when(userRepository.save(user)).thenReturn(user);
         UserService userService = new UserService(userRepository);
         boolean isAdmin = true;
+        String preferred_username = user.getName();
+        String email = user.getEmail();
 
-        String result = userService.updateUser(user, userId, isAdmin);
+        String result = userService.updateUser(user, userId, isAdmin, preferred_username, email);
 
         Assertions.assertEquals("Пользователь Testsurname успешно обновлен", result);
     }
@@ -116,7 +119,9 @@ class UserServiceTest {
         Mockito.when(userRepository.existsById(userId)).thenReturn(false);
         UserService userService = new UserService(userRepository);
         boolean isAdmin = true;
-        Executable executable = () -> userService.updateUser(new User(), userId, isAdmin);
+        String preferred_username = "";
+        String email = "";
+        Executable executable = () -> userService.updateUser(new User(), userId, isAdmin, preferred_username, email);
 
         Assertions.assertThrows(ResponseStatusException.class, executable);
     }
@@ -125,10 +130,15 @@ class UserServiceTest {
     void updateUserNotAdmin() {
         UserRepository userRepository = Mockito.mock(UserRepository.class);
         int userId = 1;
-        Mockito.when(userRepository.existsById(userId)).thenReturn(false);
+        User user = new User(userId, "Testname", "Testsurname", "Male", "Russia",
+                "79261134321", new Date(), "Testtext", "testuser@test.com", "123",
+                "testurl", false, "Moscow");
+        Mockito.when(userRepository.existsById(userId)).thenReturn(true);
         UserService userService = new UserService(userRepository);
         boolean isAdmin = false;
-        Executable executable = () -> userService.updateUser(new User(), userId, isAdmin);
+        String preferred_username = "";
+        String email = "";
+        Executable executable = () -> userService.updateUser(user, userId, isAdmin, preferred_username, email);
 
         Assertions.assertThrows(ResponseStatusException.class, executable);
     }
@@ -144,7 +154,9 @@ class UserServiceTest {
         Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         UserService userService = new UserService(userRepository);
         boolean isAdmin = true;
-        String result = userService.deleteUser(userId, isAdmin);
+        String preferred_username = user.getName();
+        String email = user.getEmail();
+        String result = userService.deleteUser(userId, isAdmin, preferred_username, email);
 
         Assertions.assertEquals("Пользователь c id = 1 успешно удален", result);
         Assertions.assertTrue(user.isDeleted());
@@ -157,13 +169,15 @@ class UserServiceTest {
         Mockito.when(userRepository.existsById(userId)).thenReturn(false);
         UserService userService = new UserService(userRepository);
         boolean isAdmin = true;
-        Executable executable = () -> userService.deleteUser(userId, isAdmin);
+        String preferred_username = "";
+        String email = "";
+        Executable executable = () -> userService.deleteUser(userId, isAdmin, preferred_username, email);
 
         Assertions.assertThrows(ResponseStatusException.class, executable);
     }
 
     @Test
-    void deleteUserNotAdmin() {
+    void deleteUserNotValidEmailAndNameInJwt() {
         UserRepository userRepository = Mockito.mock(UserRepository.class);
         int userId = 1;
         User user = new User(userId, "Testname", "Testsurname", "Male", "Russia",
@@ -173,7 +187,9 @@ class UserServiceTest {
         Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         UserService userService = new UserService(userRepository);
         boolean isAdmin = false;
-        Executable executable = () -> userService.updateUser(new User(), userId, isAdmin);
+        String preferred_username = "123";
+        String email = "123";
+        Executable executable = () -> userService.updateUser(user, userId, isAdmin, preferred_username, email);
 
         Assertions.assertThrows(ResponseStatusException.class, executable);
     }

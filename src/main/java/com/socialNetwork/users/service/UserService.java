@@ -27,26 +27,24 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    public String updateUser(User user, int id, boolean isAdmin) {
+    public String updateUser(User user, int id, boolean isAdmin, String preferred_username, String email) {
         if (!userRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        if (!isAdmin) {
+        if (!isAdmin && !user.getName().equals(preferred_username) && !user.getEmail().equals(email)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         User savedUser = userRepository.save(user);
         return String.format("Пользователь %s успешно обновлен", savedUser.getSurname());
     }
 
-    public String deleteUser(int id, boolean isAdmin) {
-        if (!userRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-        if (!isAdmin) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        }
+    public String deleteUser(int id, boolean isAdmin, String preferred_username, String email) {
         User deletedUser = userRepository.findById(id).orElseThrow(() -> new
                 ResponseStatusException(HttpStatus.NOT_FOUND));
+        if (!isAdmin && !deletedUser.getName().equals(preferred_username) && !deletedUser.getEmail().equals(email)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+
         deletedUser.setDeleted(true);
         userRepository.save(deletedUser);
         return String.format("Пользователь c id = %s успешно удален", id);

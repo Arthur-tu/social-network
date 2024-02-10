@@ -9,6 +9,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -29,7 +30,6 @@ public class UserController {
     public User getUser(@PathVariable int id, @AuthenticationPrincipal Jwt jwt) {
         return userService.getUser(id);
     }
-    //To do:
     @Operation(summary = "Обновление пользователя")
     @PutMapping("/{id}")
     public String updateUser(@RequestBody User user, @PathVariable int id, @AuthenticationPrincipal Jwt jwt) {
@@ -37,14 +37,17 @@ public class UserController {
            throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
         boolean isAdmin = isAdminFromJwt(jwt);
-        return userService.updateUser(user, id, isAdmin);
+        String preferred_username = getPreferredUsernameFromJwt(jwt);
+        String email = getEmailFromJwt(jwt);
+        return userService.updateUser(user, id, isAdmin, preferred_username, email);
     }
-    //To do:
     @Operation(summary = "Удаление пользователя")
     @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable int id, @AuthenticationPrincipal Jwt jwt) {
         boolean isAdmin = isAdminFromJwt(jwt);
-        return userService.deleteUser(id, isAdmin);
+        String preferred_username = getPreferredUsernameFromJwt(jwt);
+        String email = getEmailFromJwt(jwt);
+        return userService.deleteUser(id, isAdmin, preferred_username, email);
     }
     @Operation(summary = "Получение списка пользователей")
     @GetMapping
@@ -57,5 +60,16 @@ public class UserController {
         return  roles.stream().anyMatch(role -> role.equals("users_admin"));
     }
 
+    private String getPreferredUsernameFromJwt(Jwt jwt) {
+        Object preferred_username = jwt.getClaims().get("preferred_username");
+        Objects.requireNonNull(preferred_username, "Client name is missing in JWT");
+        return  (String) preferred_username;
+    }
+
+    private String getEmailFromJwt(Jwt jwt) {
+        Object email = jwt.getClaims().get("email");
+        Objects.requireNonNull(email, "Email is missing in JWT");
+        return  (String) email;
+    }
 
 }
