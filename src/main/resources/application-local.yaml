@@ -18,8 +18,7 @@ spring:
   datasource:
     username: postgres
     password: 123
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/users?ssl=true&sslmode=require
+    url: jdbc:postgresql://psql:5432/users?ssl=true&sslmode=require
   jpa:
     properties:
       hibernate:
